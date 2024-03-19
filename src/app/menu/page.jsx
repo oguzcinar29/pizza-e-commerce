@@ -1,5 +1,10 @@
+import MenuPage from "@/components/Menu/MenuPage";
 import React from "react";
 
 export default function Menu() {
-  return <div>as</div>;
+  return (
+    <div>
+      <MenuPage />
+    </div>
+  );
 }
