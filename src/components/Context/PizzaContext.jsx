@@ -1,10 +1,14 @@
 "use client";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const PizzaContext = createContext("");
 
 function PizzaProvider({ children }) {
   const [card, setCard] = useState([]);
+
+  useEffect(() => {
+    setCard(JSON.parse(window.localStorage.getItem("card") || "[]"));
+  }, []);
 
   const values = { card, setCard };
 

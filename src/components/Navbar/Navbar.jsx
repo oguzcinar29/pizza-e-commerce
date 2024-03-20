@@ -4,8 +4,12 @@ import { Button } from "../ui/button";
 import { ShoppingCart } from "lucide-react";
 import { MobileLinks } from "./MobileLinks";
 import { signOut, useSession } from "next-auth/react";
+import { useContext } from "react";
+import { PizzaContext } from "../Context/PizzaContext";
 export default function Navbar() {
   const { data: session } = useSession();
+  const { card } = useContext(PizzaContext);
+
   return (
     <nav className="w-3/4 m-auto pt-7 pb-7 1000max:w-4/5">
       <div className="flex justify-between">
@@ -16,8 +20,8 @@ export default function Navbar() {
           <div className="flex gap-10 items-center 1000max:hidden">
             <Link href="/">Home</Link>
             <Link href="/menu">Menu</Link>
-            <Link href="/about">About</Link>
-            <Link href="/contact">Contact</Link>
+            <Link href="/">About</Link>
+            <Link href="/">Contact</Link>
           </div>
         </div>
         <div className="flex items-center gap-6 1000max:hidden">
@@ -37,7 +41,7 @@ export default function Navbar() {
           <Link href="/order" className="relative">
             <ShoppingCart />
             <div className="absolute bg-orange-500 -top-4 text-white -right-4 rounded-full w-6 h-6 text-center ">
-              12
+              {card?.length}
             </div>
           </Link>
         </div>

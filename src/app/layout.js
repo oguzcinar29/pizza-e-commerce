@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import PizzaProvider from "@/components/Context/PizzaContext";
 import { SessionProvider } from "next-auth/react";
-
+import { Toaster } from "@/components/ui/toaster";
 const open = Open_Sans({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
@@ -19,6 +19,7 @@ export default function RootLayout({ children }) {
               <Navbar />
               {children}
               <Footer />
+              <Toaster position="top-center" />
             </div>
           </PizzaProvider>
         </SessionProvider>

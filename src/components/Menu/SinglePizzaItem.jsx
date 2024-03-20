@@ -1,9 +1,93 @@
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { PizzaContext } from "../Context/PizzaContext";
 
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "../ui/label";
+import { Checkbox } from "../ui/checkbox";
+
 export default function SinglePizzaItem({ id, price, img, name, description }) {
+  const { card, setCard } = useContext(PizzaContext);
+
+  const handleClick = () => {
+    const findItem = card?.find(
+      (item) => item.price === pizzaSize + extraCheese
+    );
+
+    console.log(findItem?.price);
+    console.log(pizzaSize + extraCheese);
+    if (!findItem || (findItem && findItem.price !== pizzaSize + extraCheese)) {
+      setCard((prevVal) => {
+        return [
+          ...prevVal,
+          {
+            id,
+            price: pizzaSize + extraCheese,
+            img,
+            name,
+            description,
+            count: 1,
+            isExtraCheese,
+            isExtraPepperoni,
+          },
+        ];
+      });
+      window.localStorage.setItem(
+        "card",
+        JSON.stringify([
+          ...card,
+          {
+            id,
+            price: pizzaSize + extraCheese,
+            img,
+            name,
+            description,
+            count: 1,
+            isExtraCheese,
+            isExtraPepperoni,
+          },
+        ])
+      );
+    } else {
+      const findIndex = card?.findIndex(
+        (item) => item.price === pizzaSize + extraCheese
+      );
+      console.log(findIndex);
+      card[findIndex].count += 1;
+      setCard(card);
+      window.localStorage.setItem("card", JSON.stringify(card));
+    }
+    setOpen(false);
+  };
+
+  const [extraCheese, setExtraCheese] = useState(0);
+
+  const [pizzaSize, setPizzaSize] = useState(price);
+
+  const [open, setOpen] = useState(false);
+
+  const [isExtraCheese, setIsExtraCheese] = useState(false);
+  const [isExtraPepperoni, setIsExtraPepperoni] = useState(false);
+
+  useEffect(() => {
+    if (open === false) {
+      setExtraCheese(0);
+      setPizzaSize(price);
+      setIsExtraCheese(false);
+      setIsExtraPepperoni(false);
+    }
+  }, [open]);
+
   return (
     <div className="border mb-7 border-slate-500 p-3 w-[32%] rounded-sm flex flex-col gap-5 min-w-72">
       <div className="bg-transparent text-center flex justify-center items-center">
@@ -14,7 +98,107 @@ export default function SinglePizzaItem({ id, price, img, name, description }) {
       </div>
       <h2 className="font-black text-xl">{name}</h2>
       <p className="text-slate-500">{description}</p>
-      <Button>Add to cart(from ${price})</Button>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button>Add to cart ${price}</Button>
+        </DialogTrigger>
+        <DialogContent className="fixed overflow-y-scroll mb-32 h-[calc(100vh-20vh)] ">
+          <DialogHeader className="flex flex-col justify-center items-center">
+            <div>
+              <img src={img} />
+            </div>
+            <DialogTitle>{name}</DialogTitle>
+            <DialogDescription>{description}</DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-10 mt-5">
+            <div className="flex flex-col gap-3">
+              <h1 className="text-center text-lg font-semibold">
+                Pick your size
+              </h1>
+              <RadioGroup
+                onValueChange={(e) => {
+                  if (e === "small") {
+                    setPizzaSize(price);
+                  }
+                  if (e === "medium") {
+                    setPizzaSize(price + 2);
+                  }
+                  if (e === "large") {
+                    setPizzaSize(price + 4);
+                  }
+                }}
+                defaultValue="small"
+                className="flex flex-col gap-5"
+              >
+                <div className="flex items-center space-x-2 border border-slate-200 p-5 rounded-lg">
+                  <RadioGroupItem value="small" id="r1" />
+                  <Label htmlFor="r1">Small ${price}</Label>
+                </div>
+                <div className="flex items-center space-x-2 border border-slate-200 p-5 rounded-lg">
+                  <RadioGroupItem value="medium" id="r2" />
+                  <Label htmlFor="r2">Medium ${price + 2}</Label>
+                </div>
+                <div className="flex items-center space-x-2 border border-slate-200 p-5 rounded-lg">
+                  <RadioGroupItem value="large" id="r3" />
+                  <Label htmlFor="r3">Large ${price + 4}</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            <div className="flex flex-col gap-5">
+              <h1 className="text-center text-lg font-semibold">
+                Any extras ?
+              </h1>
+              <div className="flex items-center space-x-2 border border-slate-200 p-5 rounded-lg">
+                <Checkbox
+                  onCheckedChange={(e) => {
+                    if (e) {
+                      setExtraCheese((prevVal) => prevVal + 1.25);
+                      setIsExtraCheese(true);
+                    } else {
+                      setExtraCheese((prevVal) => prevVal - 1.25);
+                      setIsExtraCheese(false);
+                    }
+                  }}
+                  className="rounded-none"
+                  id="terms"
+                />
+                <label
+                  htmlFor="terms"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Extra cheese +$1,25
+                </label>
+              </div>
+              <div className="items-top flex space-x-2 border border-slate-200 p-5 rounded-lg">
+                <Checkbox
+                  onCheckedChange={(e) => {
+                    if (e) {
+                      setExtraCheese((prevVal) => prevVal + 2.25);
+                      setIsExtraPepperoni(true);
+                    } else {
+                      setExtraCheese((prevVal) => prevVal - 2.25);
+                      setIsExtraPepperoni(false);
+                    }
+                  }}
+                  className="rounded-none"
+                  id="terms2"
+                />
+                <label
+                  htmlFor="terms2"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Extra pepperoni +$2,25
+                </label>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={handleClick}>
+              Add to cart ${pizzaSize + extraCheese}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
