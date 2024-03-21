@@ -6,7 +6,8 @@ import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import PizzaProvider from "@/components/Context/PizzaContext";
 import { SessionProvider } from "next-auth/react";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner";
+
 const open = Open_Sans({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {

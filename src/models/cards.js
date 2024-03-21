@@ -2,10 +2,9 @@ import mongoose, { Schema } from "mongoose";
 
 const CardsSchema = new Schema(
   {
-    name: String,
-    description: String,
-    price: Number,
-    img: String,
+    cardItems: Array,
+    total: Number,
+    userId: String,
   },
   {
     timestamps: true,

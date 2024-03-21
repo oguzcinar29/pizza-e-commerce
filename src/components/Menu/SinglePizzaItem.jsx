@@ -16,26 +16,37 @@ import {
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 
+import { toast } from "sonner";
 export default function SinglePizzaItem({ id, price, img, name, description }) {
-  const { card, setCard } = useContext(PizzaContext);
+  const { card, setCard, setTotal2 } = useContext(PizzaContext);
+  const [size, setSize] = useState("Small");
 
   const handleClick = () => {
+    toast(`${name} added to cart`, {
+      action: {
+        label: "Ok",
+        onClick: () => console.log("Ok"),
+      },
+    });
     const findItem = card?.find(
-      (item) => item.price === pizzaSize + extraCheese
+      (item) =>
+        item.size === size &&
+        item.price === pizzaSize + extraCheese &&
+        item.isExtraCheese === isExtraCheese &&
+        item.isExtraPepperoni === isExtraPepperoni
     );
 
-    console.log(findItem?.price);
-    console.log(pizzaSize + extraCheese);
-    if (!findItem || (findItem && findItem.price !== pizzaSize + extraCheese)) {
+    if (!findItem) {
       setCard((prevVal) => {
         return [
           ...prevVal,
           {
-            id,
+            id: card?.length + 1,
             price: pizzaSize + extraCheese,
             img,
             name,
             description,
+            size: size,
             count: 1,
             isExtraCheese,
             isExtraPepperoni,
@@ -47,10 +58,11 @@ export default function SinglePizzaItem({ id, price, img, name, description }) {
         JSON.stringify([
           ...card,
           {
-            id,
+            id: card?.length + 1,
             price: pizzaSize + extraCheese,
             img,
             name,
+            size: size,
             description,
             count: 1,
             isExtraCheese,
@@ -60,7 +72,11 @@ export default function SinglePizzaItem({ id, price, img, name, description }) {
       );
     } else {
       const findIndex = card?.findIndex(
-        (item) => item.price === pizzaSize + extraCheese
+        (item) =>
+          item.size === size &&
+          item.price === pizzaSize + extraCheese &&
+          item.isExtraCheese === isExtraCheese &&
+          item.isExtraPepperoni === isExtraPepperoni
       );
       console.log(findIndex);
       card[findIndex].count += 1;
@@ -68,6 +84,7 @@ export default function SinglePizzaItem({ id, price, img, name, description }) {
       window.localStorage.setItem("card", JSON.stringify(card));
     }
     setOpen(false);
+    setTotal2((prevVal) => (prevVal += pizzaSize + extraCheese));
   };
 
   const [extraCheese, setExtraCheese] = useState(0);
@@ -85,6 +102,7 @@ export default function SinglePizzaItem({ id, price, img, name, description }) {
       setPizzaSize(price);
       setIsExtraCheese(false);
       setIsExtraPepperoni(false);
+      setSize("");
     }
   }, [open]);
 
@@ -119,12 +137,15 @@ export default function SinglePizzaItem({ id, price, img, name, description }) {
                 onValueChange={(e) => {
                   if (e === "small") {
                     setPizzaSize(price);
+                    setSize("Small");
                   }
                   if (e === "medium") {
                     setPizzaSize(price + 2);
+                    setSize("Medium");
                   }
                   if (e === "large") {
                     setPizzaSize(price + 4);
+                    setSize("Large");
                   }
                 }}
                 defaultValue="small"

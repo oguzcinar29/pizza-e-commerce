@@ -8,7 +8,7 @@ import { useContext } from "react";
 import { PizzaContext } from "../Context/PizzaContext";
 export default function Navbar() {
   const { data: session } = useSession();
-  const { card } = useContext(PizzaContext);
+  const { card, setCard } = useContext(PizzaContext);
 
   return (
     <nav className="w-3/4 m-auto pt-7 pb-7 1000max:w-4/5">
@@ -33,7 +33,14 @@ export default function Navbar() {
           {session?.user && (
             <div className="flex gap-6 items-center text-lg">
               <Link href="/profile">Hello, Dawid</Link>
-              <Button onClick={() => signOut()} className="rounded-3xl text-lg">
+              <Button
+                onClick={() => {
+                  setCard([]);
+                  window.localStorage.setItem("card", "[]");
+                  signOut();
+                }}
+                className="rounded-3xl text-lg"
+              >
                 Logout
               </Button>
             </div>
