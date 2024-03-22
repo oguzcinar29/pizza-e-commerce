@@ -6,6 +6,7 @@ import { Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { apiURL } from "../../../apiURL";
+import { useSession } from "next-auth/react";
 
 export default function OrderSingleItem({
   id,
@@ -18,6 +19,7 @@ export default function OrderSingleItem({
   isExtraCheese,
   isExtraPepperoni,
 }) {
+  const { data: session } = useSession();
   const { card, setCard, total, setTotal, cardId } = useContext(PizzaContext);
   const handleClick = async (id) => {
     incTemp();
@@ -30,19 +32,23 @@ export default function OrderSingleItem({
         onClick: () => console.log("Ok"),
       },
     });
-    try {
-      const res = await fetch(`${apiURL}/api/cards/${cardId}`, {
-        method: "POST",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(id),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to delete item");
+    if (session?.user) {
+      try {
+        const itemId = id;
+        const res = await fetch(`${apiURL}/api/cards/${cardId}`, {
+          method: "POST",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({ itemId }),
+        });
+        if (!res.ok) {
+          throw new Error("Failed to delete item");
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   };
+
   const [tempCount, setTempCount] = useState(count);
   const [tempPrice, setTempPrice] = useState(price);
 
@@ -55,20 +61,22 @@ export default function OrderSingleItem({
     window.localStorage.setItem("card", JSON.stringify(card));
     setCard(card);
     incTemp();
-    try {
-      const res = await fetch(`${apiURL}/api/cards/${cardId}`, {
-        method: "PUT",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ id2, price }),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to delete item");
+    if (session?.user) {
+      try {
+        const res = await fetch(`${apiURL}/api/cards/${cardId}`, {
+          method: "PUT",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({ id2, price, type: "inc" }),
+        });
+        if (!res.ok) {
+          throw new Error("Failed to delete item");
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   };
-  const handleDecrease = (id) => {
+  const handleDecrease = async (id2) => {
     const findIndex = card.findIndex((item) => item.id === id);
 
     if (card[findIndex].count !== 1) {
@@ -77,6 +85,20 @@ export default function OrderSingleItem({
       window.localStorage.setItem("card", JSON.stringify(card));
       setCard(card);
       incTemp();
+      if (session?.user) {
+        try {
+          const res = await fetch(`${apiURL}/api/cards/${cardId}`, {
+            method: "PUT",
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({ id2, price, type: "dec" }),
+          });
+          if (!res.ok) {
+            throw new Error("Failed to delete item");
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
     }
   };
 

@@ -38,7 +38,6 @@ export default function RegisterPage() {
           throw new Error("Failed to create a card");
         } else {
           const data = await res2.json();
-          console.log(data);
           setCard(data.cardsYeah);
           window.localStorage.setItem(
             "card",

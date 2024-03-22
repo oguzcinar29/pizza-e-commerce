@@ -13,14 +13,20 @@ export default function OrderPage() {
         <h1 className="text-4xl text-center text-orange-500 font-black">
           Cart
         </h1>
-        <div className="flex gap-10 mt-5">
-          <div className="w-1/2">
-            <OrderItems />
+        {card.length !== 0 ? (
+          <div className="flex gap-10 mt-5">
+            <div className="w-1/2">
+              <OrderItems />
+            </div>
+            <div className="w-1/2">
+              <AdressInfo />
+            </div>
           </div>
-          <div className="w-1/2">
-            <AdressInfo />
-          </div>
-        </div>
+        ) : (
+          <span className="text-center font-black text-3xl pt-10">
+            Your cart is empty
+          </span>
+        )}
       </div>
     </div>
   );

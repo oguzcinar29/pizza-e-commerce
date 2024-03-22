@@ -3,6 +3,7 @@ import moongose, { Schema } from "mongoose";
 const UsersSchema = new Schema(
   {
     email: String,
+    name: String,
     password: String,
   },
   { timestamps: true }

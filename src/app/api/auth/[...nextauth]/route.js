@@ -28,6 +28,7 @@ const handler = NextAuth({
             user[0].password
           );
           if (isCorrectPass) {
+            console.log(user);
             return {
               id: user[0]._id,
               email: user[0].email,

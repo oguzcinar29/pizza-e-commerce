@@ -17,11 +17,14 @@ import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { apiURL } from "../../../apiURL";
 export default function SinglePizzaItem({ id, price, img, name, description }) {
-  const { card, setCard, setTotal2 } = useContext(PizzaContext);
+  const { card, setCard, setTotal2, cardId } = useContext(PizzaContext);
   const [size, setSize] = useState("Small");
+  const { data: session } = useSession();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     toast(`${name} added to cart`, {
       action: {
         label: "Ok",
@@ -37,11 +40,37 @@ export default function SinglePizzaItem({ id, price, img, name, description }) {
     );
 
     if (!findItem) {
+      if (session?.user) {
+        try {
+          const res = await fetch(`${apiURL}/api/cards/${cardId}`, {
+            method: "PUT",
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({
+              price,
+              type: "new",
+              img,
+              name,
+              size,
+              description,
+              count: 1,
+              isExtraCheese,
+              isExtraPepperoni,
+              pizzaSize,
+              extraCheese,
+            }),
+          });
+          if (!res.ok) {
+            throw new Error("Failed to delete item");
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
       setCard((prevVal) => {
         return [
           ...prevVal,
           {
-            id: card?.length + 1,
+            id: card[card.length - 1]?.id ? card[card.length - 1]?.id + 1 : 1,
             price: pizzaSize + extraCheese,
             img,
             name,
@@ -58,7 +87,7 @@ export default function SinglePizzaItem({ id, price, img, name, description }) {
         JSON.stringify([
           ...card,
           {
-            id: card?.length + 1,
+            id: card[card.length - 1]?.id ? card[card.length - 1]?.id + 1 : 1,
             price: pizzaSize + extraCheese,
             img,
             name,
@@ -70,6 +99,8 @@ export default function SinglePizzaItem({ id, price, img, name, description }) {
           },
         ])
       );
+
+      console.log("hey");
     } else {
       const findIndex = card?.findIndex(
         (item) =>
@@ -78,7 +109,36 @@ export default function SinglePizzaItem({ id, price, img, name, description }) {
           item.isExtraCheese === isExtraCheese &&
           item.isExtraPepperoni === isExtraPepperoni
       );
-      console.log(findIndex);
+
+      if (session?.user) {
+        console.log("h3231");
+        try {
+          const id2 = findIndex;
+          const price = pizzaSize + extraCheese;
+          const res = await fetch(`${apiURL}/api/cards/${cardId}`, {
+            method: "PUT",
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({
+              id2,
+              price,
+              type: "inc",
+              te: "12",
+              size,
+              price,
+              pizzaSize,
+              extraCheese,
+              isExtraCheese,
+              isExtraPepperoni,
+            }),
+          });
+          if (!res.ok) {
+            throw new Error("Failed to delete item");
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+
       card[findIndex].count += 1;
       setCard(card);
       window.localStorage.setItem("card", JSON.stringify(card));

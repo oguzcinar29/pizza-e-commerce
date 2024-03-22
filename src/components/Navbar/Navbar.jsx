@@ -32,7 +32,11 @@ export default function Navbar() {
           )}
           {session?.user && (
             <div className="flex gap-6 items-center text-lg">
-              <Link href="/profile">Hello, Dawid</Link>
+              <Link href="/profile">
+                Hello,{" "}
+                {session?.user?.name[0].toUpperCase() +
+                  session?.user?.name.substring(1)}
+              </Link>
               <Button
                 onClick={() => {
                   setCard([]);

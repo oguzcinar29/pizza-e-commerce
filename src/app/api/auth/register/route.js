@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
 export async function POST(request) {
-  const { email, password } = await request.json();
+  const { email, password, name } = await request.json();
   console.log(email);
 
   try {
@@ -14,7 +14,7 @@ export async function POST(request) {
     console.log(findUser);
     if (!findUser) {
       const encryptedPass = await bcrypt.hash(password, 10);
-      await Users.create({ email, password: encryptedPass });
+      await Users.create({ email, password: encryptedPass, name });
       return NextResponse.json({ message: "success" }, { status: 200 });
     } else {
       return NextResponse.json(

@@ -10,6 +10,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [err, setError] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +18,7 @@ export default function RegisterPage() {
       const res = await fetch(`${apiURL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, name }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -38,6 +39,14 @@ export default function RegisterPage() {
         className="flex flex-col gap-5 w-1/2 m-auto 1000max:w-4/5"
       >
         <h1 className="font-black text-4xl text-orange-500">Register</h1>
+        <div className="text-start">
+          <Label>Name</Label>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            type="text"
+          ></Input>
+        </div>
         <div className="text-start">
           <Label>Email</Label>
           <Input
