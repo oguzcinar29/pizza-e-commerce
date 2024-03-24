@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {useContext} from "react"
 import { ShoppingCart } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import {PizzaContext} from "../Context/PizzaContext"
