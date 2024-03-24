@@ -19,6 +19,7 @@ import { signOut, useSession } from "next-auth/react";
 
 export function MobileLinks() {
   const { data: session } = useSession();
+    const {card,setCard}=useContext(PizzaContext)
   return (
     <div>
       <Sheet>
