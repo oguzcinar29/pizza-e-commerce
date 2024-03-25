@@ -1,7 +1,7 @@
 import { Button } from "../ui/button";
 import { CircleArrowRight } from "lucide-react";
 import pizza from "../../../public/pizza-photos/big-pizza-img.png";
-
+import Link from "next/link";
 export default function HeroSection() {
   return (
     <div className="w-3/4 m-auto  mb-10 mt-10 1000max:w-4/5">
@@ -15,12 +15,14 @@ export default function HeroSection() {
             yet delicious joy in life
           </p>
           <div className="flex gap-5">
-            <Button className="w-52 flex gap-3 font-bold items-center rounded-3xl 1000max:w-32 ">
-              Order Now{" "}
-              <span>
-                <CircleArrowRight />
-              </span>
-            </Button>
+            <Link href="/menu">
+              <Button className="w-52 flex gap-3 font-bold items-center rounded-3xl 1000max:w-32 ">
+                Order Now{" "}
+                <span>
+                  <CircleArrowRight />
+                </span>
+              </Button>
+            </Link>
             <Button
               className="w-52 flex gap-3 font-bold items-center rounded-3xl 1000max:w-32 "
               variant="ghost"

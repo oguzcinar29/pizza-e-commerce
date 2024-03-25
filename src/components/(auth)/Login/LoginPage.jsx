@@ -60,7 +60,7 @@ export default function RegisterPage() {
   return (
     <div>
       {isLoggedIn && (
-        <div className="w-1/3 text-center m-auto rounded-none">
+        <div className="w-1/3 text-center m-auto rounded-none 1000max:w-full">
           <Alert variant="destructive">
             <AlertDescription className="text-2xl">
               You have to log in first!

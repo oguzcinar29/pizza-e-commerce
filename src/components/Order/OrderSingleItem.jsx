@@ -103,8 +103,11 @@ export default function OrderSingleItem({
   };
 
   return (
-    <div key={id} className="flex justify-between items-center pr-1">
-      <div className="flex gap-3 items-center">
+    <div
+      key={id}
+      className="flex justify-between items-center pr-1 1000max:gap-1"
+    >
+      <div className="flex gap-3 items-center 1000max:flex-col">
         <img className="w-32 h-32" src={img} />
         <div className="flex flex-col gap-1 ">
           <b>{name}</b>

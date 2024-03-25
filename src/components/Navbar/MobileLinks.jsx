@@ -16,9 +16,12 @@ import {
 } from "@/components/ui/sheet";
 import { ShoppingCart } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import { useContext } from "react";
+import { PizzaContext } from "../Context/PizzaContext";
 
 export function MobileLinks() {
   const { data: session } = useSession();
+  const { setCard, card } = useContext(PizzaContext);
   return (
     <div>
       <Sheet>
@@ -35,19 +38,13 @@ export function MobileLinks() {
             <SheetClose asChild>
               <Link href="/menu">Menu</Link>
             </SheetClose>
-            <SheetClose asChild>
-              <Link href="/about">About</Link>
-            </SheetClose>
-            <SheetClose asChild>
-              <Link href="/contact">Contact</Link>
-            </SheetClose>
 
             <div className="flex items-center gap-6 flex-col ">
               <SheetClose asChild>
                 <Link href="/order" className="relative">
                   <ShoppingCart />
                   <div className="absolute bg-orange-500 -top-3 text-white -right-3 rounded-full w-6 h-6 text-center ">
-                    12
+                    {card?.length}
                   </div>
                 </Link>
               </SheetClose>
@@ -61,9 +58,17 @@ export function MobileLinks() {
               )}
               {session?.user && (
                 <div className="flex gap-6 items-center flex-col text-lg">
-                  <Link href="/profile">Hello, Dawid</Link>
+                  <span>
+                    Hello,{" "}
+                    {session?.user?.name[0].toUpperCase() +
+                      session?.user?.name.substring(1)}
+                  </span>
                   <Button
-                    onClick={() => signOut()}
+                    onClick={() => {
+                      setCard([]);
+                      window.localStorage.setItem("card", "[]");
+                      signOut();
+                    }}
                     className="rounded-3xl text-lg"
                   >
                     Logout

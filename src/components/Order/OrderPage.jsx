@@ -14,16 +14,16 @@ export default function OrderPage() {
           Cart
         </h1>
         {card.length !== 0 ? (
-          <div className="flex gap-10 mt-5">
-            <div className="w-1/2">
+          <div className="flex gap-10 mt-5 1000max:flex-col 1000max:w-full">
+            <div className="w-1/2 1000max:w-full">
               <OrderItems />
             </div>
-            <div className="w-1/2">
+            <div className="w-1/2 1000max:w-full">
               <AdressInfo />
             </div>
           </div>
         ) : (
-          <span className="text-center font-black text-3xl pt-10">
+          <span className="text-center font-black text-3xl pt-10 pb-64">
             Your cart is empty
           </span>
         )}

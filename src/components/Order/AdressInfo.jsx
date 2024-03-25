@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { PizzaContext } from "../Context/PizzaContext";
 import { Button } from "../ui/button";
 import Link from "next/link";
+
 import { useSession } from "next-auth/react";
 
 export default function AdressInfo() {
@@ -46,9 +47,11 @@ export default function AdressInfo() {
           </Link>
         )}
         {session?.user && (
-          <Button className="text-xl w-full">
-            Pay ${(total + 5).toFixed(2)}
-          </Button>
+          <a href="https://buy.stripe.com/test_aEUeXL9xk2WB3Di28a">
+            <Button className="text-xl w-full">
+              Pay ${(total + 5).toFixed(2)}
+            </Button>
+          </a>
         )}
       </div>
     </div>

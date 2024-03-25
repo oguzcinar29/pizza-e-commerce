@@ -20,8 +20,6 @@ export default function Navbar() {
           <div className="flex gap-10 items-center 1000max:hidden">
             <Link href="/">Home</Link>
             <Link href="/menu">Menu</Link>
-            <Link href="/">About</Link>
-            <Link href="/">Contact</Link>
           </div>
         </div>
         <div className="flex items-center gap-6 1000max:hidden">
@@ -32,11 +30,11 @@ export default function Navbar() {
           )}
           {session?.user && (
             <div className="flex gap-6 items-center text-lg">
-              <Link href="/profile">
+              <span>
                 Hello,{" "}
                 {session?.user?.name[0].toUpperCase() +
                   session?.user?.name.substring(1)}
-              </Link>
+              </span>
               <Button
                 onClick={() => {
                   setCard([]);
