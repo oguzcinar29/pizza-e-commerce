@@ -48,8 +48,8 @@ export function MobileLinks() {
               <SheetClose asChild>
                 <Link href="/order" className="relative">
                   <ShoppingCart />
-                  <div className="absolute bg-orange-500 -top-3 text-white -right-3 rounded-full w-6 h-6 text-center ">
-                    12
+                  <div className="absolute bg-orange-500 -top-4 text-white -right-4 rounded-full w-6 h-6 text-center ">
+                    {card?.length}
                   </div>
                 </Link>
               </SheetClose>
