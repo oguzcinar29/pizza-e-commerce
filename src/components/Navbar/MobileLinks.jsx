@@ -14,14 +14,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useContext } from "react";
 import { ShoppingCart } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
-import { useContext } from "react";
 import { PizzaContext } from "../Context/PizzaContext";
-
 export function MobileLinks() {
   const { data: session } = useSession();
-  const { setCard, card } = useContext(PizzaContext);
+  const { card, setCard } = useContext(PizzaContext);
   return (
     <div>
       <Sheet>
@@ -38,13 +37,19 @@ export function MobileLinks() {
             <SheetClose asChild>
               <Link href="/menu">Menu</Link>
             </SheetClose>
+            <SheetClose asChild>
+              <Link href="/about">About</Link>
+            </SheetClose>
+            <SheetClose asChild>
+              <Link href="/contact">Contact</Link>
+            </SheetClose>
 
             <div className="flex items-center gap-6 flex-col ">
               <SheetClose asChild>
                 <Link href="/order" className="relative">
                   <ShoppingCart />
                   <div className="absolute bg-orange-500 -top-3 text-white -right-3 rounded-full w-6 h-6 text-center ">
-                    {card?.length}
+                    12
                   </div>
                 </Link>
               </SheetClose>
@@ -58,17 +63,9 @@ export function MobileLinks() {
               )}
               {session?.user && (
                 <div className="flex gap-6 items-center flex-col text-lg">
-                  <span>
-                    Hello,{" "}
-                    {session?.user?.name[0].toUpperCase() +
-                      session?.user?.name.substring(1)}
-                  </span>
+                  <Link href="/profile">Hello, Dawid</Link>
                   <Button
-                    onClick={() => {
-                      setCard([]);
-                      window.localStorage.setItem("card", "[]");
-                      signOut();
-                    }}
+                    onClick={() => signOut()}
                     className="rounded-3xl text-lg"
                   >
                     Logout
